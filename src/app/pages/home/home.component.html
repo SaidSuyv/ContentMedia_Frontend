@@ -1,0 +1,15 @@
+<header-component>
+  <a class="btn d-flex align-items-center justify-content-center">
+    <i class="bi bi-cart"></i>
+  </a>
+</header-component>
+@if( isLoading )
+{
+  <p>Cargando...</p>
+}
+@else
+{
+  @for (book of books; track $index) {
+    <p>{{ book.name }}</p>
+  }
+}

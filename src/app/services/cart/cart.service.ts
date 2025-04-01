@@ -1,20 +1,18 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { effect, Injectable, signal, WritableSignal } from '@angular/core';
 import { Book } from '../../models/book';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
-
-  private cartSubject: BehaviorSubject<Book[]> = new BehaviorSubject<Book[]>([]);
-  public cart$ = this.cartSubject.asObservable();
+  public cart:WritableSignal<Book[]> = signal([])
 
   constructor() {
+    effect(() => {
+      console.log( "update" , this.cart() )
+      localStorage.setItem("contentmedia-cart",JSON.stringify( this.cart() ))
+    })
     this.updateCart()
-    this.cartSubject.subscribe( (data:Book[]) => {
-      localStorage.setItem("contentmedia-cart",JSON.stringify(data));
-    } )
   }
 
   updateCart()
@@ -24,22 +22,22 @@ export class CartService {
     if( stored )
     {
       var cart = JSON.parse( stored ) as Book[];
-      this.cartSubject.next( cart );
+      this.cart.set( cart )
     }
   }
 
   addProduct(product:Book)
   {
-    const cart:Book[] = this.cartSubject.getValue();
-    this.cartSubject.next( [...cart,product] );
+    product.quantity = 1;
+    this.cart.update( a => [...a,product] )
   }
 
   removeProduct(idx:number)
   {
-    var cart:Book[] = this.cartSubject.getValue();
-    var ind = cart.findIndex( e => e.id === idx )
-    cart.splice( ind , 1 )
-    this.cartSubject.next( cart );
+    this.cart.update( a => {
+      var nc = a.filter( e => e.id !== idx )
+      return nc
+    } )
   }
 
 }

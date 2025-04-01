@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, effect, signal } from '@angular/core';
 import { HeaderComponent } from '../../components/header/header.component';
 import { BookService } from '../../services/book/book.service';
 import { Book } from '../../models/book';
@@ -32,39 +32,45 @@ export class HomeComponent {
 
   countCart:number = 0;
 
+  isSearching = signal( false )
+  inputSearch = signal("")
+  querySearch = signal("")
+
   constructor(
     private bookService: BookService,
     private cartService: CartService
-  ){}
-
-  ngOnInit():void
-  {
-    this.bookService.books$.subscribe( ( books:Book[] ) => {
-      this.books = books;
-
-      this.cartService.cart$.subscribe( (cart) => {
-        this.countCart = cart.length
-
-        if( books.length > 0 )
-        {
-          cart.forEach( e => {
-            var book = books.findIndex( b => b.id == e.id )
-            this.books[book].in_cart = true
-          })
-        }
-      } )
-
-    } )
-    this.bookService.isLoading$.subscribe( (l:boolean) => {
-      this.isLoading = l;
+  ){
+    effect(() => {
+      this.books = this.bookService.books()
+      this.isLoading = this.bookService.isLoading()
+      this.isError = this.bookService.isError()
     })
-    this.bookService.error$.subscribe( (o:HttpError) => {
-      this.isError = o.error
-      this.errorMessage = o.message
-    } )
 
+    effect(()=>{
+      this.countCart = this.cartService.cart().length
 
-    this.bookService.updateBooks();
+      if( this.bookService.books().length > 0 )
+      {
+        this.cartService.cart().forEach( e => {
+          var b = this.books.findIndex( b => b.id == e.id )
+          if( b >= 0 )
+            this.books[b].in_cart = true
+        })
+      }
+    })
+
+    effect((onCleanup) => {
+      const query = this.inputSearch()
+      if( query.trim().length > 0 )
+      {
+        var timer = setTimeout(() => {
+            this.bookService.searchBook( query )
+        },200)
+        onCleanup(() => clearTimeout( timer ))
+      }
+      else
+        this.bookService.updateBooks()
+    })
   }
 
   ngOnDestroy()
@@ -85,6 +91,12 @@ export class HomeComponent {
   {
     console.log( "index to remove" , idx )
     this.cartService.removeProduct( idx )
+  }
+
+
+  onProductSearch(event:any)
+  {
+    this.inputSearch.set( event.target.value )
   }
 
 }

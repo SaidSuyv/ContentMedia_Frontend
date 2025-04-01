@@ -9,8 +9,11 @@
   <h1 class="fw-bold mb-3">Mi Carrito</h1>
   <div class="d-flex flex-column row-gap-3">
     <div class="d-flex flex-column row-gap-3">
+      @if( books.length == 0 ){
+        <p class="h3 text-center">No se han encontrado elementos</p>
+      }
       @for (book of books; track $index) {
-        <cart-book-component [bookInput]="book"></cart-book-component>
+        <cart-book-component [bookInput]="book" (onQuantityChange)="onQuantityChange()" (onDelete)="onDeleteItem(book.id)"></cart-book-component>
       }
     </div>
     <div class="bg-white p-3 rounded">
@@ -23,7 +26,12 @@
         <p class="m-0 text-secondary">Total</p>
         <p class="m-0">S/.{{ total }}</p>
       </div>
-      <button class="btn btn-info w-100">Pagar ahora</button>
+      @if( books.length == 0 ){
+        <button class="btn btn-info w-100" [disabled]="books.length == 0">Pagar ahora</button>
+      }
+      @else {
+        <a class="btn btn-info w-100" routerLink="/client-information">Pagar ahora</a>
+      }
     </div>
   </div>
 </div>

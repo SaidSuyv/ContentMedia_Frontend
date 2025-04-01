@@ -1,6 +1,7 @@
 <div class="book-item h-100 d-flex flex-column bg-white rounded p-3">
   <img class="m-auto d-block" src="/book.png" alt="Libro DEMO">
-  <p class="mb-3 fw-bolder">{{ bookInput().name }}</p>
+  <p class="mb-1 fw-bolder">{{ bookInput().name }}</p>
+  <p class="mb-3 fw-light text-secondary isbn">{{ bookInput().isbn }}</p>
   <p class="mb-3 fs-6 fw-normal">S/.{{ bookInput().book_price }}</p>
   @if( bookInput().in_cart ){
     <div class="d-flex column-gap-2">

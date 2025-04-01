@@ -1,4 +1,4 @@
-import { Injectable, RESPONSE_INIT } from '@angular/core';
+import { Injectable, RESPONSE_INIT, signal, WritableSignal } from '@angular/core';
 import { BackendService } from '../backend/backend.service';
 import { BehaviorSubject } from 'rxjs';
 import { Book } from '../../models/book';
@@ -17,35 +17,58 @@ export class BookService {
   public isLoading$ = this.loadingSubject.asObservable();
   public error$ = this.errorSubject.asObservable();
 
-  constructor(private backend: BackendService) { }
+  public books:WritableSignal<Book[]> = signal([])
+  public isLoading = signal(false)
+  public isError = signal(false)
+  public errorMessage = signal("")
 
-  private isBookResponse( response:any ): response is { data: Book[] }
-  {
-    return Array.isArray( response.data );
-  }
+  constructor(private backend: BackendService) { }
 
   updateBooks():void
   {
-    this.loadingSubject.next( true );
+    this.isError.set( false )
+    this.isLoading.set( true )
     this.backend.get("/books")
     .subscribe({
-      next: (response) => {
-        if( this.isBookResponse(response) )
-          this.booksSubject.next( response.data );
+      next: (response:any) => {
+        if( Array.isArray( response.data ) )
+          this.books.set( response.data )
         else
-          throw new Error("Hubo un error inesperado en la respuesta del servidor.");
+          throw new Error("Hubo un error inesperado con el servidor.");
       },
       error: (error:any) => {
         console.log("ended error")
-        this.loadingSubject.next( false );
-        this.errorSubject.next({
-          error: true,
-          message: error.message
-        });
+        this.isLoading.set( false )
+        this.isError.set( true )
+        this.errorMessage.set( error.message )
       },
       complete: () => {
         console.log("ended complete");
-        this.loadingSubject.next( false );
+        this.isLoading.set( false )
+      }
+    })
+  }
+
+  searchBook(query:string)
+  {
+    this.isError.set( false )
+    this.isLoading.set( true )
+    this.backend.get("/books/"+query)
+    .subscribe({
+      next: (response:any) => {
+        console.log( "get search" )
+        if( Array.isArray( response.data ) )
+          this.books.set( response.data )
+        else
+          this.books.set( [ response.data ] )
+      },
+      error: (error:any) => {
+        this.isLoading.set( false )
+        this.isError.set( true )
+        this.errorMessage.set( error.message )
+      },
+      complete: () => {
+        this.isLoading.set( false )
       }
     })
   }

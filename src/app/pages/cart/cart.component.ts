@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, effect } from '@angular/core';
 import { HeaderComponent } from '../../components/header/header.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { LoadingComponent } from '../../common/loading/loading.component';
@@ -13,8 +13,6 @@ import { CartBookComponent } from './components/cart-book/cart-book.component';
   imports: [
     HeaderComponent,
     FooterComponent,
-    LoadingComponent,
-    ErrorComponent,
     RouterModule,
     CartBookComponent
   ],
@@ -33,17 +31,33 @@ export class CartComponent {
 
   constructor(
     private cartService: CartService
-  ){}
-
-  ngOnInit()
-  {
-    this.cartService.cart$.subscribe(
-      (cart) => {
-        this.subtotal = cart.map( e => parseFloat(e.book_price) ).reduce((a,b)=>a+b).toFixed(2)
+  ){
+    effect(() => {
+      console.log("updatesito")
+      var cart = this.cartService.cart()
+      this.books = cart
+      if( cart.length > 0 )
+      {
+        this.subtotal = this.books.map( e => e.book_price ).reduce((a,b)=>a+b).toFixed(2)
         this.total = this.subtotal
-        this.books = cart
+      }else
+      {
+        this.subtotal = "0.00"
+        this.total = "0.00"
       }
-    )
+    })
+  }
+
+  onQuantityChange()
+  {
+    this.subtotal = this.books.map( e => e.book_price * e.quantity ).reduce((a,b)=>a+b).toFixed(2)
+    this.total = this.subtotal
+    this.cartService.cart.update(() => this.books)
+  }
+
+  onDeleteItem(idx:number)
+  {
+    this.cartService.removeProduct(idx);
   }
 
 }

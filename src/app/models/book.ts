@@ -6,4 +6,5 @@ export interface Book {
   stock: number;
   created_at: Date;
   updated_at: Date;
+  in_cart: boolean;
 }

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-error',
+  selector: 'error-common-component',
   imports: [],
   templateUrl: './error.component.html',
   styleUrl: './error.component.css'

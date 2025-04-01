@@ -1,1 +1,31 @@
-<p>cart works!</p>
+<header-component>
+  <a class="col-6 btn d-flex align-items-center column-gap-2" routerLink="/">
+    <i class="bi bi-chevron-left"></i>
+    <span>Continuar comprando</span>
+  </a>
+</header-component>
+
+<div class="flex-grow-1 container-md p-3">
+  <h1 class="fw-bold mb-3">Mi Carrito</h1>
+  <div class="d-flex flex-column row-gap-3">
+    <div class="d-flex flex-column row-gap-3">
+      @for (book of books; track $index) {
+        <cart-book-component [bookInput]="book"></cart-book-component>
+      }
+    </div>
+    <div class="bg-white p-3 rounded">
+      <div class="d-flex align-items-center justify-content-between">
+        <p class="m-0 text-secondary">Subtotal</p>
+        <p class="m-0">S/.{{ subtotal }}</p>
+      </div>
+      <hr>
+      <div class="mb-3 d-flex align-items-center justify-content-between">
+        <p class="m-0 text-secondary">Total</p>
+        <p class="m-0">S/.{{ total }}</p>
+      </div>
+      <button class="btn btn-info w-100">Pagar ahora</button>
+    </div>
+  </div>
+</div>
+
+<footer-component></footer-component>

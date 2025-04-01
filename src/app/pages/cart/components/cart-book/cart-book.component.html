@@ -1,11 +1,25 @@
-<div class="d-flex align-items-center justify-content-between column-gap-3 bg-white rounded p-3">
-  <div class="w-50">
+<div class="cart-book-item d-flex align-items-center justify-content-between column-gap-3 bg-white rounded p-3 align-items-lg-center">
+  <div class="img-container">
     <img class="w-100" src="book.png" alt="Libro DEMO">
   </div>
-  <div class="d-flex flex-column align-items-end row-gap-2">
-    <p class="fw-bold text-end m-0">{{ bookInput().name }}</p>
-    <div class="d-flex flex-column align-items-end flex-sm-row align-items-sm-center justify-content-sm-center">
-      <div class="d-flex">
+  <div class="d-flex flex-column align-items-end row-gap-2 align-items-lg-start col-lg">
+    <p class="fw-bold text-end m-0 col-lg-12">{{ bookInput().name }}</p>
+    <div class="d-flex flex-column row-gap-3 align-items-end flex-sm-row align-items-sm-center justify-content-sm-center gap-5 col-lg-12">
+      <div class="d-flex column-gap-4 flex-md-column align-items-md-end flex-lg-row col-lg">
+        <div class="d-flex flex-column">
+          <p class="m-0 label text-end">Precio</p>
+          <p class="m-0">S/.{{ bookInput().book_price }}</p>
+        </div>
+        <div class="d-flex flex-column">
+          <p class="m-0 label text-end">Stock</p>
+          <p class="m-0 text-end">{{ bookInput().stock - bookInput().quantity }}</p>
+        </div>
+        <div class="d-flex flex-column">
+          <p class="m-0 label text-end">Total</p>
+          <p class="m-0">S/.{{ (bookInput().book_price * bookInput().quantity).toFixed(2) }}</p>
+        </div>
+      </div>
+      <div class="d-flex flex-md-column align-items-md-end flex-lg-row col-lg">
         <div class="bg-secondary-subtle rounded-pill p-2 d-flex align-items-center justify-content-between column-gap-3">
           <button class="btn bg-white rounded-circle" (click)="onDecrease()" [disabled]="bookInput().quantity == 1">
             <i class="bi bi-dash-lg"></i>
@@ -18,16 +32,6 @@
         <button class="btn" (click)="onDeleteItem()">
           <i class="bi bi-trash"></i>
         </button>
-      </div>
-      <div class="d-flex column-gap-4">
-        <div class="d-flex flex-column">
-          <p class="m-0 label text-end">Precio</p>
-          <p class="m-0">S/.{{ bookInput().book_price }}</p>
-        </div>
-        <div class="d-flex flex-column">
-          <p class="m-0 label text-end">Total</p>
-          <p class="m-0">S/.{{ (bookInput().book_price * bookInput().quantity).toFixed(2) }}</p>
-        </div>
       </div>
     </div>
   </div>

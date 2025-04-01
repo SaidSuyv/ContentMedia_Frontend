@@ -1,1 +1,57 @@
-<p>client-information works!</p>
+<header-component>
+  <a class="col-6 col-md-auto btn d-flex align-items-center column-gap-2" routerLink="/cart">
+    <i class="bi bi-chevron-left"></i>
+    <span>Regresar al carrito</span>
+  </a>
+</header-component>
+
+<div class="flex-grow-1 container-lg p-3">
+  <form class="needs-validation d-flex flex-column row-gap-3" novalidate [formGroup]="client" (ngSubmit)="onSubmit($event)">
+    <h1 class="fw-bold m-0">Información del cliente</h1>
+    <div class="bg-white rounded p-3">
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="first_name" formControlName="first_name" placeholder="Nombres" required>
+        <label for="first_name">Nombres</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="last_name" formControlName="last_name" placeholder="Apellidos" required>
+        <label for="last_name">Apellidos</label>
+      </div>
+      <div class="mb-3 d-flex flex-column row-gap-3">
+        <div class="form-floating col-12">
+          <select id="doc_type" class="form-select" formControlName="doc_type" required>
+            <option value="1" selected>DNI</option>
+            <option value="2">RUC</option>
+            <option value="3">Carné de extranjería</option>
+          </select>
+          <label for="doc_type">Tipo Documento</label>
+        </div>
+        <div class="form-floating col-12">
+          <input type="text" class="form-control" id="doc_number" formControlName="doc_number" placeholder="Nro Documento" required>
+          <label for="doc_number">Nro Documento</label>
+        </div>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="phone" formControlName="phone" placeholder="Nro Celular" required>
+        <label for="phone">Nro Celular</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="email" class="form-control" id="email" formControlName="email" placeholder="Correo electrónico" required>
+        <label for="email">Correo electrónico</label>
+      </div>
+    </div>
+    <h1 class="fw-bold m-0">Información de compra</h1>
+    <div class="bg-white rounded p-3">
+      <div class="form-floating">
+        <select id="order_doc_type" class="form-select" [formControl]="order_doc_type" required>
+          <option value="1" selected>Boleta</option>
+          <option value="2">Factura</option>
+        </select>
+        <label for="order_doc_type">Tipo Documento</label>
+      </div>
+    </div>
+    <button class="btn btn-primary w-100">Finalizar compra</button>
+  </form>
+</div>
+
+<footer-component></footer-component>

@@ -40,4 +40,9 @@ export class CartService {
     } )
   }
 
+  reset()
+  {
+    this.cart.set([])
+  }
+
 }

@@ -1,14 +1,14 @@
 <header-component>
-  <a class="col-6 btn d-flex align-items-center column-gap-2" routerLink="/">
+  <a class="col-6 col-md-auto btn d-flex align-items-center column-gap-2" routerLink="/">
     <i class="bi bi-chevron-left"></i>
     <span>Continuar comprando</span>
   </a>
 </header-component>
 
-<div class="flex-grow-1 container-md p-3">
+<div class="flex-grow-1 container-lg p-3">
   <h1 class="fw-bold mb-3">Mi Carrito</h1>
-  <div class="d-flex flex-column row-gap-3">
-    <div class="d-flex flex-column row-gap-3">
+  <div class="d-flex flex-column row-gap-3 flex-md-row justify-content-md-between justify-content-xl-start">
+    <div class="d-flex flex-column row-gap-3 col-md-auto col-xl-5">
       @if( books.length == 0 ){
         <p class="h3 text-center">No se han encontrado elementos</p>
       }
@@ -16,7 +16,7 @@
         <cart-book-component [bookInput]="book" (onQuantityChange)="onQuantityChange()" (onDelete)="onDeleteItem(book.id)"></cart-book-component>
       }
     </div>
-    <div class="bg-white p-3 rounded">
+    <div class="bg-white p-3 rounded col-md-4 subtotal-container">
       <div class="d-flex align-items-center justify-content-between">
         <p class="m-0 text-secondary">Subtotal</p>
         <p class="m-0">S/.{{ subtotal }}</p>
@@ -27,10 +27,10 @@
         <p class="m-0">S/.{{ total }}</p>
       </div>
       @if( books.length == 0 ){
-        <button class="btn btn-info w-100" [disabled]="books.length == 0">Pagar ahora</button>
+        <button class="btn btn-primary w-100" [disabled]="books.length == 0">Pagar ahora</button>
       }
       @else {
-        <a class="btn btn-info w-100" routerLink="/client-information">Pagar ahora</a>
+        <a class="btn btn-primary w-100" routerLink="/client-information">Pagar ahora</a>
       }
     </div>
   </div>

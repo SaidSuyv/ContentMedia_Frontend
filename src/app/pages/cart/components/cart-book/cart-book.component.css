@@ -1,1 +1,17 @@
 p.label{ font-size: .85rem; }
+div.img-container{
+  width: 100px;
+}
+
+@media screen and (min-width: 800px)
+{
+  div.img-container
+  {
+    width: 150px;
+  }
+
+  div.cart-book-item
+  {
+    max-width: 500px;
+  }
+}

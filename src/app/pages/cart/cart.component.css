@@ -4,3 +4,8 @@
   display: flex;
   flex-direction: column;
 }
+
+.subtotal-container
+{
+  height: fit-content;
+}

@@ -16,4 +16,9 @@ export class BackendService {
   {
     return this.http.get( this.url + path );
   }
+
+  post(path:string,body:object)
+  {
+    return this.http.post( this.url + path , body );
+  }
 }

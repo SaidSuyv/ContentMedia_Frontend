@@ -2,10 +2,11 @@
   <img class="m-auto d-block" src="/book.png" alt="Libro DEMO">
   <p class="mb-1 fw-bolder">{{ bookInput().name }}</p>
   <p class="mb-3 fw-light text-secondary isbn">{{ bookInput().isbn }}</p>
+  <p class="mb-3 fw-light text-secondary stock">Stock: {{ bookInput().stock }}</p>
   <p class="mb-3 fs-6 fw-normal">S/.{{ bookInput().book_price }}</p>
   @if( bookInput().in_cart ){
     <div class="d-flex column-gap-2">
-      <button class="flex-grow-1 btn btn-info" disabled>En el carrito</button>
+      <button class="flex-grow-1 btn btn-primary" disabled>En el carrito</button>
       <button class="btn btn-secondary" (click)="removeFromCart()">
         <i class="bi bi-trash"></i>
       </button>
@@ -15,6 +16,6 @@
     <button class="btn btn-secondary w-100 cursor-danger" disabled>Agotado</button>
   }
   @else {
-    <button class="btn btn-outline-info w-100" (click)="addToCart()" [disabled]="bookInput().stock == 0" >Agregar carrito</button>
+    <button class="btn btn-outline-primary w-100" (click)="addToCart()" [disabled]="bookInput().stock == 0" >Agregar carrito</button>
   }
 </div>

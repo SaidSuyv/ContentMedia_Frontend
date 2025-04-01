@@ -5,6 +5,8 @@ import { Router, RouterModule } from '@angular/router';
 import { ReactiveFormsModule , FormBuilder, Validators } from '@angular/forms';
 import { CartService } from '../../services/cart/cart.service';
 import { BackendService } from '../../services/backend/backend.service';
+import { Book } from '../../models/book';
+import { LoadingComponent } from '../../common/loading/loading.component';
 
 @Component({
   selector: 'app-client-information',
@@ -12,7 +14,8 @@ import { BackendService } from '../../services/backend/backend.service';
     HeaderComponent,
     FooterComponent,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    LoadingComponent
   ],
   templateUrl: './client-information.component.html',
   styleUrl: './client-information.component.css'
@@ -35,11 +38,17 @@ export class ClientInformationComponent {
 
   order_doc_type = this.fb.control('1',[Validators.required])
 
+  books:Book[] = []
+
+  isLoading:boolean = false;
+
   constructor()
   {
     effect(() => {
       if( this.cart.cart().length == 0 )
         this.route.navigate(['/'])
+      else
+        this.books = this.cart.cart()
     })
   }
 
@@ -57,6 +66,7 @@ export class ClientInformationComponent {
 
     const body = { client , order , products }
 
+    this.isLoading = true
     this.backend.post("/sale/generate",body)
     .subscribe({
       next: (response:any) => {
@@ -67,9 +77,12 @@ export class ClientInformationComponent {
         }
       },
       error: (error:any) => {
+        this.isLoading = false
         console.log("ERROR",error)
       },
-      complete: () => {}
+      complete: () => {
+        this.isLoading = false
+      }
     })
 
   }

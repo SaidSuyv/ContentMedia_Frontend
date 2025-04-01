@@ -4,3 +4,8 @@
   display: flex;
   flex-direction: column;
 }
+
+div.summary-container
+{
+  max-height: 300px;
+}

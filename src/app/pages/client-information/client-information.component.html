@@ -5,53 +5,90 @@
   </a>
 </header-component>
 
-<div class="flex-grow-1 container-lg p-3">
-  <form class="needs-validation d-flex flex-column row-gap-3" novalidate [formGroup]="client" (ngSubmit)="onSubmit($event)">
-    <h1 class="fw-bold m-0">Información del cliente</h1>
-    <div class="bg-white rounded p-3">
-      <div class="form-floating mb-3">
-        <input type="text" class="form-control" id="first_name" formControlName="first_name" placeholder="Nombres" required>
-        <label for="first_name">Nombres</label>
-      </div>
-      <div class="form-floating mb-3">
-        <input type="text" class="form-control" id="last_name" formControlName="last_name" placeholder="Apellidos" required>
-        <label for="last_name">Apellidos</label>
-      </div>
-      <div class="mb-3 d-flex flex-column row-gap-3">
-        <div class="form-floating col-12">
-          <select id="doc_type" class="form-select" formControlName="doc_type" required>
-            <option value="1" selected>DNI</option>
-            <option value="2">RUC</option>
-            <option value="3">Carné de extranjería</option>
-          </select>
-          <label for="doc_type">Tipo Documento</label>
+@if( isLoading ){
+  <loading-common-component class="flex-grow-1"></loading-common-component>
+}
+@else{
+  <div class="flex-grow-1 container-lg p-3">
+    <form class="needs-validation d-flex flex-column gap-0 row-gap-3 column-gap-5 flex-lg-row" novalidate [formGroup]="client" (ngSubmit)="onSubmit($event)">
+      <div class="d-flex flex-column row-gap-3 col">
+        <h1 class="fw-bold m-0">Información del cliente</h1>
+        <div class="bg-white rounded p-3">
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="first_name" formControlName="first_name" placeholder="Nombres" required>
+            <label for="first_name">Nombres</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="last_name" formControlName="last_name" placeholder="Apellidos" required>
+            <label for="last_name">Apellidos</label>
+          </div>
+          <div class="mb-3 d-flex flex-column row-gap-3">
+            <div class="form-floating col-12">
+              <select id="doc_type" class="form-select" formControlName="doc_type" required>
+                <option value="1" selected>DNI</option>
+                <option value="2">RUC</option>
+                <option value="3">Carné de extranjería</option>
+              </select>
+              <label for="doc_type">Tipo Documento</label>
+            </div>
+            <div class="form-floating col-12">
+              <input type="text" class="form-control" id="doc_number" formControlName="doc_number" placeholder="Nro Documento" required>
+              <label for="doc_number">Nro Documento</label>
+            </div>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="phone" formControlName="phone" placeholder="Nro Celular" required>
+            <label for="phone">Nro Celular</label>
+          </div>
+          <div class="form-floating">
+            <input type="email" class="form-control" id="email" formControlName="email" placeholder="Correo electrónico" required>
+            <label for="email">Correo electrónico</label>
+          </div>
         </div>
-        <div class="form-floating col-12">
-          <input type="text" class="form-control" id="doc_number" formControlName="doc_number" placeholder="Nro Documento" required>
-          <label for="doc_number">Nro Documento</label>
+        <div class="d-flex flex-column row-gap-3">
+          <h1 class="fw-bold m-0">Información de compra</h1>
+          <div class="bg-white rounded p-3">
+            <div class="form-floating">
+              <select id="order_doc_type" class="form-select" [formControl]="order_doc_type" required>
+                <option value="1" selected>Boleta</option>
+                <option value="2">Factura</option>
+              </select>
+              <label for="order_doc_type">Tipo Documento</label>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="form-floating mb-3">
-        <input type="text" class="form-control" id="phone" formControlName="phone" placeholder="Nro Celular" required>
-        <label for="phone">Nro Celular</label>
+      <div class="d-flex flex-column row-gap-3 col col-lg-5">
+        <div class="bg-white p-3 rounded w-100">
+          <h3 class="mb-3">Resumen de compra</h3>
+          <div class="summary-container d-flex flex-column overflow-y-auto">
+            @for (book of books; track $index) {
+              <div class="d-flex align-items-center mb-3">
+                <div class="col-3 col-md-1 col-lg-2">
+                  <img class="w-100" src="book.png" alt="Libro">
+                </div>
+                <div class="col-9 d-flex flex-column justify-content-between">
+                  <p class="fw-semibold m-0">{{ book.name }}</p>
+                  <div class="d-flex align-items-center">
+                    <div class="col d-flex flex-column">
+                      <p class="col m-0">Total</p>
+                      <p class="col m-0">S/.{{ book.book_price * book.quantity }}</p>
+                    </div>
+                    <div class="col d-flex flex-column">
+                      <p class="col m-0">Cantidad</p>
+                      <p class="col m-0">{{ book.quantity }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+        <button type="submit" [disabled]="client.invalid" class="btn btn-primary w-100">Finalizar compra</button>
       </div>
-      <div class="form-floating mb-3">
-        <input type="email" class="form-control" id="email" formControlName="email" placeholder="Correo electrónico" required>
-        <label for="email">Correo electrónico</label>
-      </div>
-    </div>
-    <h1 class="fw-bold m-0">Información de compra</h1>
-    <div class="bg-white rounded p-3">
-      <div class="form-floating">
-        <select id="order_doc_type" class="form-select" [formControl]="order_doc_type" required>
-          <option value="1" selected>Boleta</option>
-          <option value="2">Factura</option>
-        </select>
-        <label for="order_doc_type">Tipo Documento</label>
-      </div>
-    </div>
-    <button class="btn btn-primary w-100">Finalizar compra</button>
-  </form>
-</div>
+    </form>
+  </div>
+}
+
 
 <footer-component></footer-component>
